@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Embaralhar palavras</title>
+        <style>
+            html, body, h3 {
+                font-family: Arial, Helvetica, sans-serif;
+                font-size: 1em;
+            }
+            input[type='text'] {
+                font-size: 1em;
+            }
+            textarea{
+                font-family: Arial, Helvetica, sans-serif;
+            
+
+            }
+            .container{
+                margin:0 auto;
+                width:295px;
+                background: yellow;
+                padding:10px;
+            } 
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h3><center>Digite uma palavra para embaralhar</center></h3>
+            <input type="text" id="campo" >
+            <input type="button" value="EMBARALHAR" onclick="enviar();"><br>
+            <!-- Div id resultado, recebe o resultado separados com vírgula-->
+            <input type="hidden" id="resultado">
+            <div id="total">0</div>
+            <!-- Lista o resultado um abaixo do outro na id lista -->
+            <textarea id="lista"  rows="10" cols="39" name="comentarios"></textarea>
+                <script>
+                    // Pega o valor digitado no campo 
+                    const str = campo.value;
+                    // Função que embaralha as letras da string, encontrada na net
+                    const permute = (str = '') => {
+                        if (!!str.length && str.length < 2 ){
+                            return str
+                        }
+                        const arr = [];
+                        for (let i = 0; i < str.length; i++){
+                            let char = str[i]    
+                            if (str.indexOf(char) != i)
+                                continue
+                                let remainder = str.slice(0, i) + str.slice(i + 1, str.length)
+                                for (let permutation of permute(remainder)){
+                                    arr.push(char + permutation)
+                                }       
+                        }
+                        return arr
+                    }
+                    // Função que mostra o resultado quando clica no botão EMBARALHAR
+                    function enviar(){
+                        // Envia o resultado separados por vírgula para o input hidden 
+                        resultado.value=permute(campo.value);
+                        // Pega todo o conteudo do input resultado pelo valor
+                        let palavras = resultado.value;
+                        // Conta quantos palavras foram formadas, contando o total das vírgulas
+                        const ocorrencias = (palavras.match(/,/g) || []).length;
+                        // Se o campo para digitar a palavra estiver vazio, mostra zero no total de possibilidades
+                        if(campo.value.length == 0){
+                            total.innerHTML = 0;
+                        }else{
+                            // Mostra o total de vírgulas encontrado, somando com mais 1
+                            total.innerHTML = ocorrencias + 1 + " possibilidades";
+                        }
+                        // Mostra o resultado na textarea, um abaixo do outro, substituindo todas as vírgula por quebra linha
+                        lista.innerHTML = palavras.toString().replace(/,/g, "\n");
+                    }
+                </script>
+        </div>
+    </body>
+</html>
+

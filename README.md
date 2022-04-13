@@ -1,0 +1,1 @@
+# embaralhar_string
